@@ -14,74 +14,104 @@ import com.byteowls.vaadin.chartjs.options.Position;
 import com.byteowls.vaadin.chartjs.ChartJs;
 import com.example.application.backend.model.Location;
 import com.example.application.backend.repository.LocationRepository;
+import com.example.application.backend.service.HourService;
 import com.example.application.backend.service.LocationService;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.data.VaadinSpringDataHelpers;
+import com.vaadin.ui.AbstractJavaScriptComponent;
+
+import jakarta.annotation.security.PermitAll;
+
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.charts.Chart;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.grid.Grid;
 import com.example.application.backend.utility.SearchFilter;
+import com.example.application.views.grid.DailyWeather;
+import com.example.application.views.grid.PaginatedGrid;
+import com.example.application.views.main.MainView;
 import com.example.application.backend.utility.LocationDataProvider;
-import com.s
+import com.example.application.views.login.Chart;
+//import org.vaadin.addons.chartjs.ChartJsState;
+//import org.vaadin.addons.chartjs.ChartJs;
+//import org.vaadin.addons.chartjs.config.BarChartConfig;
+//import org.vaadin.addons.chartjs.data.BarDataset;
+//import org.vaadin.addons.chartjs.data.Dataset;
+//import org.vaadin.addons.chartjs.data.LineDataset;
+//import org.vaadin.addons.chartjs.options.Position;
 
+@PermitAll
+@Route(value = "chart", layout = MainView.class)
+public class ChartView extends VerticalLayout {
 
-@Route("chart")
-public class ChartView extends HorizontalLayout {
-	
+	Chart chart;
 
-	    public ChartView() {
+	public ChartView() {
 
-	        // Creating a chart display area
-	        SOChart soChart = new SOChart();
-	        soChart.setSize("900px", "500px");
+		// VerticalLayout layout = new VerticalLayout();
+		// service.locationValueParse();
+		add(new H1("Chart View"));
+		var tabSheet = new TabSheet();
+		tabSheet.setWidth("100%");
+		// add(new Chart());
 
-	        // Let us define some inline data
-	        CategoryData labels =
-	                new CategoryData("April Fool's Day", "Marriage Day", "Election Day", "Any Other Day");
-	        Data data = new Data(5, 20, 100, 2);
+		tabSheet.add("", chartData());
 
-	        // Axes
-	        XAxis xAxis;
-	        YAxis yAxis;
+		add(tabSheet);
+	}
 
-	        // Bar chart
-	        BarChart bc1 = new BarChart(labels, data); // First bar chart
-	        xAxis = new XAxis(labels);
-	        xAxis.getLabel(true).setRotation(45);
-	        yAxis = new YAxis(data);
-	        RectangularCoordinate coordinate = new RectangularCoordinate(xAxis, yAxis);
-	        bc1.plotOn(coordinate); // Bar chart needs to be plotted on a coordinate system
-	        coordinate.getPosition(true).setRight(Size.percentage(60)); // Leave space on the right side
+	public Component chartData() {
+		BarChartConfig config = new BarChartConfig();
+		config.data().labels("January", "February", "March", "April", "May", "June", "July")
+				.addDataset(new BarDataset().type().label("Dataset 1").backgroundColor("rgba(151,187,205,0.5)")
+						.borderColor("white").borderWidth(2))
+				.addDataset(new LineDataset().type().label("Dataset 2").backgroundColor("rgba(151,187,205,0.5)")
+						.borderColor("white").borderWidth(2))
+				.addDataset(new BarDataset().type().label("Dataset 3").backgroundColor("rgba(220,220,220,0.5)")).and();
 
-//	        BarChart bc2 = new BarChart(data, labels); // Second bar chart
-//	        xAxis = new XAxis(data);
-//	        yAxis = new YAxis(labels);
-//	        coordinate = new RectangularCoordinate(xAxis, yAxis);
-//	        bc2.plotOn(coordinate); // Bar chart needs to be plotted on a coordinate system
-//	        coordinate.getPosition(true).setLeft(Size.percentage(60)); // Leave space on the left side
+		config.options().responsive(true).title().display(true).position(Position.LEFT)
+				.text("Chart.js Combo Bar Line Chart").and().done();
 
-	        // Just to demonstrate it, we are creating a "Download" and a "Zoom" toolbox button
-	        Toolbox toolbox = new Toolbox();
-	        toolbox.addButton(new Toolbox.Download(), new Toolbox.Zoom());
+		List<String> labels = config.data().getLabels();
+		for (Dataset<?, ?> ds : config.data().getDatasets()) {
+			List<Double> data = new ArrayList<>();
+			for (int i = 0; i < labels.size(); i++) {
+				data.add((double) (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100));
+			}
 
-	        // Switching off the default legend
-	        soChart.disableDefaultLegend();
+			if (ds instanceof BarDataset) {
+				BarDataset bds = (BarDataset) ds;
+				bds.dataAsList(data);
+			}
 
-	        // Let's add some titles
-	        Title title = new Title("Probability of Getting Fooled");
-	        title.setSubtext("Truth is always simple but mostly hidden - Syam");
+			if (ds instanceof LineDataset) {
+				LineDataset lds = (LineDataset) ds;
+				lds.dataAsList(data);
+			}
+		}
 
-	        // Add the chart components to the chart display area
-	        soChart.add(bc1, bc2, toolbox, title);
+		ChartJs chartjs = new ChartJs(config);
 
-	        // Add to the view
-	        add(soChart);
-	    }}
-	
+		chart = new Chart(chartjs);
+		// chart.setJ(true);
+		// chart.setJsLoggingEnabled(true);
+
+		VerticalLayout layout = new VerticalLayout(chart);
+		layout.setPadding(false);
+		add(layout);
+
+		return layout;
+	}
+}

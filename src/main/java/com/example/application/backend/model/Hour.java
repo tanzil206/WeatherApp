@@ -17,7 +17,39 @@ public class Hour {
 	@Column(name = "id")
 	private Integer id;
 	@Column(name = "time")
-	private Timestamp time;
+	private String time;
+	@Column(name = "date")
+	private String date;
+	@Column(name = "humidity_level")
+	private String humidityLevel;
+	@Column(name = "temp_level")
+	private String tempLevel;
+	@Column(name = "windspeed_level")
+	private String windSpeedLevel;
+
+	public String getHumidityLevel() {
+		return humidityLevel;
+	}
+
+	public void setHumidityLevel(String humidityLevel) {
+		this.humidityLevel = humidityLevel;
+	}
+
+	public String getTempLevel() {
+		return tempLevel;
+	}
+
+	public void setTempLevel(String tempLevel) {
+		this.tempLevel = tempLevel;
+	}
+
+	public String getWindSpeedLevel() {
+		return windSpeedLevel;
+	}
+
+	public void setWindSpeedLevel(String windSpeedLevel) {
+		this.windSpeedLevel = windSpeedLevel;
+	}
 
 	public Integer getId() {
 		return id;
@@ -27,12 +59,20 @@ public class Hour {
 		this.id = id;
 	}
 
-	public Timestamp getTime() {
+	public String getTime() {
 		return time;
 	}
 
-	public void setTime(Timestamp time) {
+	public void setTime(String time) {
 		this.time = time;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 }

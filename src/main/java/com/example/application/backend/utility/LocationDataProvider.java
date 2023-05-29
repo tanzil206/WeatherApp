@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.application.backend.model.Location;
 import com.example.application.backend.repository.LocationRepository;
+import com.example.application.backend.service.HourService;
 import com.example.application.backend.service.LocationService;
 
 import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
@@ -27,23 +28,22 @@ import java.util.List;
 public class LocationDataProvider extends AbstractBackEndDataProvider<Location, SearchFilter> {
 
 	@Autowired
-	LocationService locationService ;
+	LocationService locationService;
 
 	@Autowired
-	LocationRepository locationRepository ;
-	
+	LocationRepository locationRepository;
+
 	@Autowired
-    public LocationDataProvider(LocationService locationService) {
-       this.locationService = locationService;
-    }
+	public LocationDataProvider(LocationService locationService) {
+		this.locationService = locationService;
+	}
+
 
 	@Override
 	protected Stream<Location> fetchFromBackEnd(Query<Location, SearchFilter> query) {
-	
-		
-		//locationService= new LocationService(locationRepository);
-		final List<Location> DATABASE = new ArrayList<>(locationService.getAllLocation());
-		
+
+		final List<Location> DATABASE = new ArrayList<>(locationService.getDailyForecast());
+
 		// A real app should use a real database or a service
 		// to fetch, filter and sort data.
 		Stream<Location> stream = DATABASE.stream();
@@ -82,10 +82,10 @@ public class LocationDataProvider extends AbstractBackEndDataProvider<Location, 
 	private static Comparator<Location> LocationFieldComparator(String sorted) {
 		Location location = new Location();
 
-		if (sorted.equals("name")) {
+		if (sorted.equals("latitude")) {
 			return Comparator.comparing(Location -> location.getLatitude());
-		} else if (sorted.equals("profession")) {
-			return Comparator.comparing(Location -> location.getPer_temperature());
+		} else if (sorted.equals("date")) {
+			return Comparator.comparing(Location -> location.getDate());
 		}
 		return (p1, p2) -> 0;
 	}

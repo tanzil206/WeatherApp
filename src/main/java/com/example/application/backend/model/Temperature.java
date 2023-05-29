@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,7 +17,8 @@ public class Temperature {
   private Integer id;
   @Column(name = "temp_level")
   private String tempLevel;
-
+	@ManyToOne
+	Hour hour;
 
   public Integer getId() {
     return id;
@@ -32,6 +34,14 @@ public String getTempLevel() {
 
 public void setTempLevel(String tempLevel) {
 	this.tempLevel = tempLevel;
+}
+
+public Hour getHour() {
+	return hour;
+}
+
+public void setHour(Hour hour) {
+	this.hour = hour;
 }
 
 }

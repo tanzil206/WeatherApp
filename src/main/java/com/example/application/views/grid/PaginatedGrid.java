@@ -22,218 +22,224 @@ import java.util.Objects;
  * @param <T>
  * @author tanzil
  */
-public class PaginatedGrid<T, F> extends Grid<T> {
+public class PaginatedGrid<T> extends Grid<T> {
 
-    private final GridPagination pagination = new GridPagination();
+	private final GridPagination pagination = new GridPagination();
 
-    private Component paginationContainer = null;
+	private Component paginationContainer = null;
 
-    private PaginationLocation paginationLocation = PaginationLocation.BOTTOM;
+	private PaginationLocation paginationLocation = PaginationLocation.BOTTOM;
 
-    private DataProvider<T, ?> dataProvider;
+	private DataProvider<T, ?> dataProvider;
 
-    private F filter;
-    
-    LocationService locationService;
-    
-    public PaginatedGrid() {
-        super();
-        init();
-    }
+	//private F filter;
 
-    public PaginatedGrid(Class<T> beanType) {
-        super(beanType);
-        init();
-    }
+	LocationService locationService;
 
-    private void init() {
-        this.dataProvider = super.getDataProvider();
-        this.setAllRowsVisible(true);
-        pagination.addPageChangeListener(e -> doCalcs(e.getNewPage()));
-        addSortListener(e -> doCalcs(pagination.getPage()));
-    }
+	public PaginatedGrid() {
+		super();
+		init();
+	}
 
-    /**
-     * Sets a container component for the pagination component to be placed within.
-     * If a container is set the PaginationLocation will be ignored.
-     * @param paginationContainer
-     */
-    public void setPaginationContainer(Component paginationContainer) {
-        this.paginationContainer = paginationContainer;
-    }
+	public PaginatedGrid(Class<T> beanType) {
+		super(beanType);
+		init();
+	}
 
-    @Override
-    protected void onAttach(AttachEvent attachEvent) {
-        super.onAttach(attachEvent);
+	private void init() {
+		this.dataProvider = super.getDataProvider();
+		this.setAllRowsVisible(true);
+		pagination.addPageChangeListener(e -> doCalcs(e.getNewPage()));
+		addSortListener(e -> doCalcs(pagination.getPage()));
+	}
 
-        Span wrapper = new Span(pagination);
-        wrapper.getElement().getStyle().set("width", "100%");
-        wrapper.getElement().getStyle().set("display", "flex");
-        wrapper.getElement().getStyle().set("justify-content", "center");
+	/**
+	 * Sets a container component for the pagination component to be placed within.
+	 * If a container is set the PaginationLocation will be ignored.
+	 * 
+	 * @param paginationContainer
+	 */
+	public void setPaginationContainer(Component paginationContainer) {
+		this.paginationContainer = paginationContainer;
+	}
 
-        if (paginationContainer!=null){
-            paginationContainer.getElement().insertChild(0, wrapper.getElement());
-        } else {
-            getParent().ifPresent(p -> {
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		super.onAttach(attachEvent);
 
-                int indexOfChild = p.getElement().indexOfChild(this.getElement());
+		Span wrapper = new Span(pagination);
+		wrapper.getElement().getStyle().set("width", "100%");
+		wrapper.getElement().getStyle().set("display", "flex");
+		wrapper.getElement().getStyle().set("justify-content", "center");
 
-                //this moves the pagination element below the grid
-                if (paginationLocation == PaginationLocation.BOTTOM)
-                    indexOfChild++;
+		if (paginationContainer != null) {
+			paginationContainer.getElement().insertChild(0, wrapper.getElement());
+		} else {
+			getParent().ifPresent(p -> {
 
-                p.getElement().insertChild(indexOfChild, wrapper.getElement());
-            });
-        }
-        doCalcs(0);
-    }
+				int indexOfChild = p.getElement().indexOfChild(this.getElement());
 
-    private void doCalcs(int newPage) {
-        int offset = newPage > 0 ? (newPage - 1) * this.getPageSize() : 0;
+				// this moves the pagination element below the grid
+				if (paginationLocation == PaginationLocation.BOTTOM)
+					indexOfChild++;
 
-        InnerQuery query = new InnerQuery<>(offset, filter);
+				p.getElement().insertChild(indexOfChild, wrapper.getElement());
+			});
+		}
+		doCalcs(0);
+	}
 
-        pagination.setTotal(dataProvider.size(query));
+	private void doCalcs(int newPage) {
+		int offset = newPage > 0 ? (newPage - 1) * this.getPageSize() : 0;
 
-        super.setDataProvider(DataProvider.fromStream(dataProvider.fetch(query)));
+		InnerQuery query = new InnerQuery<>(offset);
 
-    }
+		pagination.setTotal(dataProvider.size(query));
 
-    public void refreshPaginator() {
-        if (pagination != null) {
-            pagination.setPageSize(getPageSize());
-            pagination.setPage(1);
-            if (dataProvider != null) {
-                doCalcs(pagination.getPage());
-            }
-            pagination.refresh();
-        }
-    }
+		super.setDataProvider(DataProvider.fromStream(dataProvider.fetch(query)));
 
-    @Override
-    public void setPageSize(int pageSize) {
-        super.setPageSize(pageSize);
-        refreshPaginator();
+	}
 
-    }
+	public void refreshPaginator() {
+		if (pagination != null) {
+			pagination.setPageSize(getPageSize());
+			pagination.setPage(1);
+			if (dataProvider != null) {
+				doCalcs(pagination.getPage());
+			}
+			pagination.refresh();
+		}
+	}
 
-    public int getPage() {
-        return pagination.getPage();
-    }
+	@Override
+	public void setPageSize(int pageSize) {
+		super.setPageSize(pageSize);
+		refreshPaginator();
 
-    public void setPage(int page) {
-        pagination.setPage(page);
-    }
+	}
 
-    /**
-     * @return the location of the pagination element
-     */
-    public PaginationLocation getPaginationLocation() {
-        return paginationLocation;
-    }
+	public int getPage() {
+		return pagination.getPage();
+	}
 
-    /**
-     * setter of pagination location
-     *
-     * @param paginationLocation either PaginationLocation.TOP or PaginationLocation.BOTTOM
-     */
-    public void setPaginationLocation(PaginationLocation paginationLocation) {
-        this.paginationLocation = paginationLocation;
-    }
+	public void setPage(int page) {
+		pagination.setPage(page);
+	}
 
-    @Override
-    public void setAllRowsVisible(boolean allRowsVisible) {
-        super.setAllRowsVisible(true);
-    }
+	/**
+	 * @return the location of the pagination element
+	 */
+	public PaginationLocation getPaginationLocation() {
+		return paginationLocation;
+	}
 
-    /**
-     * Sets the count of the pages displayed before or after the current page.
-     *
-     * @param size
-     */
-    public void setPaginatorSize(int size) {
-        pagination.setPage(1);
-        pagination.setPaginatorSize(size);
-        pagination.refresh();
-    }
+	/**
+	 * setter of pagination location
+	 *
+	 * @param paginationLocation either PaginationLocation.TOP or
+	 *                           PaginationLocation.BOTTOM
+	 */
+	public void setPaginationLocation(PaginationLocation paginationLocation) {
+		this.paginationLocation = paginationLocation;
+	}
 
-    /**
-     * Sets the texts they are displayed on the paginator. This method is useful
-     * when localization of the component is applicable.
-     *
-     * @param pageText the text to display for the `Page` term in the Paginator
-     * @param ofText   the text to display for the `of` term in the Paginator
-     */
-    public void setPaginatorTexts(String pageText, String ofText) {
-        pagination.setPageText(pageText);
-        pagination.setOfText(ofText);
-    }
+	@Override
+	public void setAllRowsVisible(boolean allRowsVisible) {
+		super.setAllRowsVisible(true);
+	}
 
-    @Override
-    public void setDataProvider(DataProvider<T, ?> dataProvider) {
-        Objects.requireNonNull(dataProvider, "DataProvider should not be null!");
+	/**
+	 * Sets the count of the pages displayed before or after the current page.
+	 *
+	 * @param size
+	 */
+	public void setPaginatorSize(int size) {
+		pagination.setPage(1);
+		pagination.setPaginatorSize(size);
+		pagination.refresh();
+	}
 
-        if (!Objects.equals(this.dataProvider, dataProvider)) {
-            this.dataProvider = dataProvider;
-            this.dataProvider.addDataProviderListener(event -> {
-                refreshPaginator();
-            });
-            refreshPaginator();
-        }
+	/**
+	 * Sets the texts they are displayed on the paginator. This method is useful
+	 * when localization of the component is applicable.
+	 *
+	 * @param pageText the text to display for the `Page` term in the Paginator
+	 * @param ofText   the text to display for the `of` term in the Paginator
+	 */
+	public void setPaginatorTexts(String pageText, String ofText) {
+		pagination.setPageText(pageText);
+		pagination.setOfText(ofText);
+	}
 
-    }
-    
-    public void setFilter(F filter) {
-    	this.filter = filter;
-    } 
+	@Override
+	public void setDataProvider(DataProvider<T, ?> dataProvider) {
+		Objects.requireNonNull(dataProvider, "DataProvider should not be null!");
 
-    /**
-     * change visibility of pagination component
-     *
-     * @param visibility boolean to change visibility
-     */
-    public void setPaginationVisibility(boolean visibility) {
-        pagination.setVisible(visibility);
-    }
+		if (!Objects.equals(this.dataProvider, dataProvider)) {
+			this.dataProvider = dataProvider;
+			this.dataProvider.addDataProviderListener(event -> {
+				refreshPaginator();
+			});
+			refreshPaginator();
+		}
 
-    /**
-     * Adds a ComponentEventListener to be notified with a PageChangeEvent each time
-     * the selected page changes.
-     *
-     * @param listener to be added
-     * @return registration to unregister the listener from the component
-     */
-    public Registration addPageChangeListener(ComponentEventListener<GridPagination.PageChangeEvent> listener) {
-        return pagination.addPageChangeListener(listener);
-    }
+	}
 
-    /**
-     * Enumeration to define the location of the element relative to the grid
-     **/
-    public enum PaginationLocation {TOP, BOTTOM}
+//	public void setFilter(F filter) {
+//		this.filter = filter;
+//	}
 
-    private class InnerQuery<F> extends Query<T, F> {
+	/**
+	 * change visibility of pagination component
+	 *
+	 * @param visibility boolean to change visibility
+	 */
+	public void setPaginationVisibility(boolean visibility) {
+		pagination.setVisible(visibility);
+	}
 
-        InnerQuery() {
-            this(0);
-        }
-        
-        InnerQuery(F filter) {
-            this(0, filter);
-        }
+	/**
+	 * Adds a ComponentEventListener to be notified with a PageChangeEvent each time
+	 * the selected page changes.
+	 *
+	 * @param listener to be added
+	 * @return registration to unregister the listener from the component
+	 */
+	public Registration addPageChangeListener(ComponentEventListener<GridPagination.PageChangeEvent> listener) {
+		return pagination.addPageChangeListener(listener);
+	}
 
-        InnerQuery(int offset) {
-            super(offset, pagination.getPageSize(), getDataCommunicator().getBackEndSorting(), getDataCommunicator().getInMemorySorting(), null);
-        }
+	/**
+	 * Enumeration to define the location of the element relative to the grid
+	 **/
+	public enum PaginationLocation {
+		TOP, BOTTOM
+	}
 
-        InnerQuery(int offset, F filter) {
-            super(offset, pagination.getPageSize(), getDataCommunicator().getBackEndSorting(), getDataCommunicator().getInMemorySorting(), filter);
-        }
+	private class InnerQuery<F> extends Query<T, F> {
 
-        InnerQuery(int offset, List<QuerySortOrder> sortOrders, SerializableComparator<T> serializableComparator) {
-            super(offset, pagination.getPageSize(), sortOrders, serializableComparator, null);
-        }
+		InnerQuery() {
+			this(0);
+		}
 
-    }
+		InnerQuery(F filter) {
+			this(0, filter);
+		}
+
+		InnerQuery(int offset) {
+			super(offset, pagination.getPageSize(), getDataCommunicator().getBackEndSorting(),
+					getDataCommunicator().getInMemorySorting(), null);
+		}
+
+		InnerQuery(int offset, F filter) {
+			super(offset, pagination.getPageSize(), getDataCommunicator().getBackEndSorting(),
+					getDataCommunicator().getInMemorySorting(), filter);
+		}
+
+		InnerQuery(int offset, List<QuerySortOrder> sortOrders, SerializableComparator<T> serializableComparator) {
+			super(offset, pagination.getPageSize(), sortOrders, serializableComparator, null);
+		}
+
+	}
 
 }

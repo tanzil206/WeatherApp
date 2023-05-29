@@ -1,6 +1,5 @@
 package com.example.application.views.grid;
 
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -26,8 +25,7 @@ import com.vaadin.flow.shared.Registration;
 @NpmPackage(value = "lit-element", version = "^3.2.2")
 @NpmPackage(value = "lit-html", version = "2.4.0")
 @JsModule("./grid-pagination.js")
-public class GridPagination extends Component implements GridPaginationModel{
-
+public class GridPagination extends Component implements GridPaginationModel {
 
 	/**
 	 * Default constructor creating an instance of the PlutoniumPagination using
@@ -38,7 +36,6 @@ public class GridPagination extends Component implements GridPaginationModel{
 		setPageSize(1);
 		setSize(1);
 	}
-
 
 	/**
 	 * Gets the size of the page, that is number of elements a page could display.
@@ -68,9 +65,10 @@ public class GridPagination extends Component implements GridPaginationModel{
 	}
 
 	public void refresh() {
-		this.getElement().executeJs("$0.observePageCount($1,$2,$3)",this, this.getPage(), this.getPageSize(),
+		this.getElement().executeJs("$0.observePageCount($1,$2,$3)", this, this.getPage(), this.getPageSize(),
 				this.getTotal());
 	}
+
 	/**
 	 * Adds a ComponentEventListener to be notified with a PageChangeEvent each time
 	 * the selected page changes.
@@ -96,7 +94,7 @@ public class GridPagination extends Component implements GridPaginationModel{
 		private final int oldPage;
 
 		public PageChangeEvent(GridPagination source, boolean fromClient,
-							   @EventData("event.detail.newPage") int newPage, @EventData("event.detail.oldPage") int oldPage) {
+				@EventData("event.detail.newPage") int newPage, @EventData("event.detail.oldPage") int oldPage) {
 			super(source, fromClient);
 			this.newPage = newPage;
 			this.oldPage = oldPage;

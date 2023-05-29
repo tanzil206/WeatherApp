@@ -15,46 +15,13 @@ public class Unit {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private Integer id;
-	@Column(name = "time_zone")
-	private String timeZone;
-	@Column(name = "temperature_unit")
-	private String temperatureUnit;
-	@Column(name = "humidity_unit")
-	private String humidityUnit;
-	@Column(name = "windspeed_unit")
-	private String windspeedUnit;
+	@Column(name = "weather_type")
+	private String weatherType;
+	@Column(name = "weather_unit")
+	private String weatherUnit;
 
-	public String getTimeZone() {
-		return timeZone;
-	}
 
-	public void setTimeZone(String timeZone) {
-		this.timeZone = timeZone;
-	}
 
-	public String getTemperatureUnit() {
-		return temperatureUnit;
-	}
-
-	public void setTemperatureUnit(String temperatureUnit) {
-		this.temperatureUnit = temperatureUnit;
-	}
-
-	public String getHumidityUnit() {
-		return humidityUnit;
-	}
-
-	public void setHumidityUnit(String humidityUnit) {
-		this.humidityUnit = humidityUnit;
-	}
-
-	public String getWindspeedUnit() {
-		return windspeedUnit;
-	}
-
-	public void setWindspeedUnit(String windspeedUnit) {
-		this.windspeedUnit = windspeedUnit;
-	}
 
 	public Integer getId() {
 		return id;
@@ -63,4 +30,22 @@ public class Unit {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	public String getWeatherType() {
+		return weatherType;
+	}
+
+	public void setWeatherType(String weatherType) {
+		this.weatherType = weatherType;
+	}
+
+	public String getWeatherUnit() {
+		return weatherUnit;
+	}
+
+	public void setWeatherUnit(String weatherUnit) {
+		this.weatherUnit = weatherUnit;
+	}
+	
+	
 }

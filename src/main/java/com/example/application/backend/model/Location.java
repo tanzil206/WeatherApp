@@ -31,7 +31,7 @@ public class Location {
 	@Column(name = "is_day")
 	private String dateType;
 	@Column(name = "time")
-	private String day;
+	private String time;
 	@Column(name = "generation_time")
 	private String generationTime;
 	@Column(name = "location_timezone")
@@ -40,9 +40,8 @@ public class Location {
 	private String elevation;
 	@Column(name = "favourite")
 	private String favourite;
-
-	@ManyToOne
-	Hour hour;
+	@Column(name = "date")
+	private String date;
 	@ManyToOne
 	Temperature temperature;
 	@ManyToOne
@@ -57,29 +56,30 @@ public class Location {
 		super();
 	}
 
-	public Location(String latitude, String longitude, String per_temperature, String wind_speed, String wind_direction,
-			String weather_code, String dateType, String day, String generationTime, String locationTimezone,
-			String elevation, String favourite, Hour hour, Temperature temperature, Humidity humidity,
-			WindSpeed windspeed, Unit unit) {
-		super();
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.per_temperature = per_temperature;
-		this.wind_speed = wind_speed;
-		this.wind_direction = wind_direction;
-		this.weather_code = weather_code;
-		this.dateType = dateType;
-		this.day = day;
-		this.generationTime = generationTime;
-		this.locationTimezone = locationTimezone;
-		this.elevation = elevation;
-		this.favourite = favourite;
-		this.hour = hour;
-		this.temperature = temperature;
-		this.humidity = humidity;
-		this.windspeed = windspeed;
-		this.unit = unit;
-	}
+//	public Location(String latitude, String longitude, String per_temperature, String wind_speed, String wind_direction,
+//			String weather_code, String dateType, String time, String generationTime, String locationTimezone,
+//			String elevation, String favourite, Hour hour, Temperature temperature, Humidity humidity,
+//			WindSpeed windspeed, Unit unit,String date) {
+//		super();
+//		this.latitude = latitude;
+//		this.longitude = longitude;
+//		this.per_temperature = per_temperature;
+//		this.wind_speed = wind_speed;
+//		this.wind_direction = wind_direction;
+//		this.weather_code = weather_code;
+//		this.dateType = dateType;
+//		this.time = time;
+//		this.generationTime = generationTime;
+//		this.locationTimezone = locationTimezone;
+//		this.elevation = elevation;
+//		this.favourite = favourite;
+//		this.hour = hour;
+//		this.temperature = temperature;
+//		this.humidity = humidity;
+//		this.windspeed = windspeed;
+//		this.unit = unit;
+//		this.date=date;
+//	}
 
 	public String getLatitude() {
 		return latitude;
@@ -129,12 +129,13 @@ public class Location {
 		this.dateType = dateType;
 	}
 
-	public String getDay() {
-		return day;
+
+	public String getTime() {
+		return time;
 	}
 
-	public void setDay(String day) {
-		this.day = day;
+	public void setTime(String time) {
+		this.time = time;
 	}
 
 	public String getFavourite() {
@@ -177,13 +178,13 @@ public class Location {
 		this.elevation = elevation;
 	}
 
-	public Hour getHour() {
-		return hour;
-	}
-
-	public void setHour(Hour hour) {
-		this.hour = hour;
-	}
+//	public Hour getHour() {
+//		return hour;
+//	}
+//
+//	public void setHour(Hour hour) {
+//		this.hour = hour;
+//	}
 
 	public Temperature getTemperature() {
 		return temperature;
@@ -224,4 +225,13 @@ public class Location {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+	
 }
