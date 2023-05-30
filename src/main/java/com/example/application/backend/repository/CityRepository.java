@@ -1,5 +1,6 @@
 package com.example.application.backend.repository;
 
+import com.example.application.backend.model.City;
 import java.util.List;
 
 
@@ -12,7 +13,7 @@ public interface CityRepository extends CrudRepository<City, Long>  {
 
 	public City findById(long id);
 	
-	public List<City> findByCity_name(String city_name);
+	public City findByCity_name(String city_name);
 
 
 	

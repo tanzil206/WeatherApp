@@ -76,7 +76,7 @@ public class WeatherView extends VerticalLayout {
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
-		grid.addColumn(Location::getLatitude).setHeader("City Name");
+		grid.addColumn(Location::getCity_name).setHeader("City Name");
 		grid.addColumn(Location::getPer_temperature).setHeader("Temperature").setSortable(true);
 		grid.addColumn(Location::getWind_speed).setHeader("Wind Speed").setSortable(true);
 		grid.addColumn(Location::getDate).setHeader("Date").setSortable(true);
@@ -84,8 +84,8 @@ public class WeatherView extends VerticalLayout {
 
 			// button for saving the name to backend
 			Button update = new Button("Favourite", event -> {
-				long id = Location.getId();
-				service.updatefavourite(id);
+				String city_name = Location.getCity_name;
+				service.updatefavourite(city_name);
 				grid.getDataProvider().refreshItem(Location);
 			});
 			// layouts for placing the text field on top
