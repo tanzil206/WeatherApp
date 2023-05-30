@@ -1,5 +1,6 @@
 package com.example.application.backend.service;
 
+import com.example.application.backend.model.City;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.application.backend.model.Hour;
 import com.example.application.backend.model.Location;
+import com.example.application.backend.repository.CityRepository;
 import com.example.application.backend.repository.HourRepository;
 import com.example.application.backend.repository.HumidityRepository;
 import com.example.application.backend.repository.LocationRepository;
@@ -19,26 +21,30 @@ import org.json.JSONObject;
 @Service
 public class LocationService {
 
-	@Autowired
-	LocationRepository locationRepository;
-	@Autowired
-	HourRepository hourRepository;
-	@Autowired
-	TemperatureRepository temperatureRepository;
-	@Autowired
-	HumidityRepository humidityRepository;
+    @Autowired
+    LocationRepository locationRepository;
+    @Autowired
+    HourRepository hourRepository;
+    @Autowired
+    TemperatureRepository temperatureRepository;
+    @Autowired
+    HumidityRepository humidityRepository;
+    @Autowired
+    CityRepository cityRepository;
+    @Autowired
+    CityService cityService;
 
-	public LocationService(LocationRepository locationRepository) {
+    public LocationService(LocationRepository locationRepository) {
 
-		super();
-		this.locationRepository = locationRepository;
-	}
+        super();
+        this.locationRepository = locationRepository;
+    }
 
-	public ArrayList<Location> getAllLocation() {
-		ArrayList<Location> location = new ArrayList<>();
-		locationRepository.findAll().forEach(location::add);
-		return location;
-	}
+    public ArrayList<Location> getAllLocation() {
+        ArrayList<Location> location = new ArrayList<>();
+        locationRepository.findAll().forEach(location::add);
+        return location;
+    }
 
 //	public ArrayList<Location> getHourlyForecast(String date) {
 //		ArrayList<Location> locationList = new ArrayList<>();
@@ -52,96 +58,103 @@ public class LocationService {
 //
 //		return locationList;
 //	}
+    public ArrayList<Location> getDailyForecast() {
+        ArrayList<Location> locationList = new ArrayList<>();
+        Location location = new Location();
+        List<String> distinctDate = locationRepository.findDistinctDate();
 
-	public ArrayList<Location> getDailyForecast() {
-		ArrayList<Location> locationList = new ArrayList<>();
-		Location location = new Location();
-		List<String> distinctDate = locationRepository.findDistinctDate();
+        for (int i = 0; i < distinctDate.size(); i++) {
 
-		for (int i = 0; i < distinctDate.size(); i++) {
+            long locationLd = locationRepository.findIdByDate(distinctDate.get(i));
 
-			long locationLd = locationRepository.findIdByDate(distinctDate.get(i));
-			
-			location =locationRepository.findById(locationLd);
-			locationList.add(location);
-		}
+            location = locationRepository.findById(locationLd);
+            locationList.add(location);
+        }
 
-		return locationList;
-	}
+        return locationList;
+    }
 
-	public void updatefavourite(long id) {
+    public void updatefavourite(String city_name) {
 
-		Location loc = locationRepository.findById(id);
+        City city = cityRepository.findByCity_name(city_name);
 
-		loc.setFavourite("yes");
+        city.setFavourite("yes");
 
-		locationRepository.save(loc);
+        cityRepository.save(city);
 
-	}
+    }
 
-	public Location getById(long id) {
-		return locationRepository.findById(id);
-	}
+    public Location getById(long id) {
+        return locationRepository.findById(id);
+    }
 
-	public long locationValueParse() {
+    public void jsonValueParse() {
 
-		Location location = new Location();
+        Location location = new Location();
 
-		ApiUtility apiUtility = new ApiUtility();
-		String responseBody = (String) apiUtility.dataRetriver();
+        ArrayList<City> cityList = cityService.getAllCity();
+        ApiUtility apiUtility = new ApiUtility();
+        if (cityList.size() > 0) {
 
-		JSONObject obj = new JSONObject(responseBody);
+            for (int c = 0; c < cityList.size(); c++) {
 
-		JSONObject weatherBody = obj.getJSONObject("current_weather");
+                String latitude = cityList.get(c).getLatitude();
+                String longitude = cityList.get(c).getLongitude();
 
-		location.setPer_temperature(weatherBody.get("temperature").toString());
+                String responseBody = (String) apiUtility.weatherDataRetriver(latitude, longitude);
 
-		location.setWind_speed(weatherBody.get("windspeed").toString());
-		location.setWind_direction(weatherBody.get("winddirection").toString());
+                JSONObject obj = new JSONObject(responseBody);
 
-		location.setWeather_code(weatherBody.get("weathercode").toString());
-		// weather.s(weatherBody.get("is_day").toString());
-		location.setTime(weatherBody.get("time").toString());
+                location.setCity_name(cityList.get(c).getCity_name());
 
-		location.setLatitude(obj.get("latitude").toString());
+                JSONObject weatherBody = obj.getJSONObject("current_weather");
 
-		location.setLongitude(obj.get("longitude").toString());
-		location.setGenerationTime(obj.get("generationtime_ms").toString());
+                location.setPer_temperature(weatherBody.get("temperature").toString());
 
-		String[] parts = weatherBody.get("time").toString().split("T");
-		String date = parts[0];
-		location.setDate(date);	
+                location.setWind_speed(weatherBody.get("windspeed").toString());
+                location.setWind_direction(weatherBody.get("winddirection").toString());
 
-		location.setLocationTimezone(obj.get("timezone").toString());
-		location.setElevation(obj.get("elevation").toString());
+                location.setWeather_code(weatherBody.get("weathercode").toString());
+                // weather.s(weatherBody.get("is_day").toString());
+                location.setTime(weatherBody.get("time").toString());
 
-		location.setFavourite("no");
+                location.setGenerationTime(obj.get("generationtime_ms").toString());
 
-		long locationId = locationRepository.save(location).getId();
-		JSONObject hourBody = obj.getJSONObject("hourly");
-		
-		JSONArray per_hour =hourBody.getJSONArray("time");
-		JSONArray per_temp =hourBody.getJSONArray("temperature_2m");
-		JSONArray per_humidity =hourBody.getJSONArray("relativehumidity_2m");
-		JSONArray per_wind =hourBody.getJSONArray("windspeed_10m");
-		Hour hour = new Hour();
-		for(int t =0 ;t<per_hour.length();t++){
-			String time =per_hour.get(t).toString();
-			String temp =per_temp.get(t).toString();
-			String humidity =per_humidity.get(t).toString();
-			String wind =per_wind.get(t).toString();
-			String[] hourPart = time.split("T");
-			String dateTime = hourPart[0];
-			hour.setDate(dateTime);
-			hour.setTime(time);
-			hour.setTempLevel(temp);
-			hour.setHumidityLevel(humidity);
-			hour.setWindSpeedLevel(wind);
-			hourRepository.save(hour).getId();
-		}
-		
+                String[] parts = weatherBody.get("time").toString().split("T");
+                String date = parts[0];
+                location.setDate(date);
 
-		return locationId;
+                location.setLocationTimezone(obj.get("timezone").toString());
+                location.setElevation(obj.get("elevation").toString());
 
-	}
+                long locationId = locationRepository.save(location).getId();
+                JSONObject hourBody = obj.getJSONObject("hourly");
+
+                String[] per_hour = hourBody.getJSONArray("time").getJSONArray(0).toString().split(",");
+                String[] per_temp = hourBody.getJSONArray("temperature_2m").getJSONArray(0).toString().split(",");
+                String[] per_humidity = hourBody.getJSONArray("relativehumidity_2m").getJSONArray(0).toString().split(",");
+                String[] per_wind = hourBody.getJSONArray("windspeed_10m").getJSONArray(0).toString().split(",");
+                String[] per_rain = hourBody.getJSONArray("rain").getJSONArray(0).toString().split(",");
+                Hour hour = new Hour();
+                for (int t = 0; t < per_hour.length; t++) {
+                    String time = per_hour[t].toString();
+                    String temp = per_temp[t].toString();
+                    String humidity = per_humidity[t].toString();
+                    String wind = per_wind[t].toString();
+                    String rain = per_rain[t].toString();
+                    String[] hourPart = time.split("T");
+                    String dateTime = hourPart[0];
+                    hour.setDate(dateTime);
+                    hour.setTime(time);
+                    hour.setTempLevel(temp);
+                    hour.setHumidityLevel(humidity);
+                    hour.setWindSpeedLevel(wind);
+                    hour.setRain(rain);
+                    hourRepository.save(hour).getId();
+                }
+            }
+
+        }
+
+    }
 }

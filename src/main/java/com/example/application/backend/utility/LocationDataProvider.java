@@ -9,12 +9,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import com.example.application.backend.model.Location;
 import com.example.application.backend.repository.LocationRepository;
-import com.example.application.backend.service.HourService;
 import com.example.application.backend.service.LocationService;
-
 import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.provider.QuerySortOrder;

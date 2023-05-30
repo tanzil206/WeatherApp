@@ -8,32 +8,53 @@ import java.net.http.HttpResponse;
 
 public class ApiUtility {
 
-	public ApiUtility() {
-		super();
-		init();
-	}
+    PropertyReader propertyReader = new PropertyReader();
 
-	private void init() {
-		dataRetriver();
-	}
+    public ApiUtility() {
+        super();
+        //    init();
+    }
 
-	public String dataRetriver() {
+//    private void init() {
+//        weatherDataRetriver();
+//    }
+    public String weatherDataRetriver(String latitude, String longitude) {
 
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(
-						"https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m"))
-				.method("GET", HttpRequest.BodyPublishers.noBody()).build();
-		HttpResponse<String> response = null;
-		try {
-			response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println(response.body());
+        HttpResponse<String> response = null;
+        try {
+            String forecastUrl = propertyReader.loadPropertiesValues("weather.forecast.api.url" + latitude + "&longitude=" + longitude + "weather.forecast.api.param");
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(forecastUrl))
+                    .method("GET", HttpRequest.BodyPublishers.noBody()).build();;
 
-		return response.body();
-	}
+            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(response.body());
 
+        return response.body();
+    }
+
+    public String cityNameRetriver(String cityName) {
+
+        HttpResponse<String> response = null;
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(propertyReader.loadPropertiesValues("https://api.api-ninjas.com/v1/geocoding?city=") + cityName)).
+                    headers("X-Api-Key", propertyReader.loadPropertiesValues("city.name.api.key"))
+                    .method("GET", HttpRequest.BodyPublishers.noBody()).build();
+
+            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(response.body());
+
+        return response.body();
+    }
 }

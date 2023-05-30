@@ -10,13 +10,13 @@ public class SearchFilter {
         this.searchTerm = searchTerm;
     }
 
-    public boolean test(Location location) {
+    public boolean checkLocation(Location location) {
         boolean matchesLocation = matches(location.getLatitude(), searchTerm);
         boolean matchesTemp = matches(location.getPer_temperature(), searchTerm);
         boolean matchesWindSpeed = matches(location.getWind_speed(), searchTerm);
         return matchesLocation || matchesTemp || matchesWindSpeed;
     }
-    public boolean test(Hour hour) {
+    public boolean checkHour(Hour hour) {
         boolean matchesDate = matches(hour.getDate(), searchTerm);
         boolean matchesTemp = matches(hour.getTempLevel(), searchTerm);
         boolean matchesHumidity = matches(hour.getHumidityLevel(), searchTerm);
