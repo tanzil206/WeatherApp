@@ -19,6 +19,8 @@ public class Hour {
     private String time;
     @Column(name = "date")
     private String date;
+    @Column(name = "city_name")
+	private String city_name;
     @Column(name = "humidity_level")
     private String humidityLevel;
     @Column(name = "temp_level")
@@ -83,5 +85,13 @@ public class Hour {
     public void setRain(String rain) {
         this.rain = rain;
     }
+
+	public String getCity_name() {
+		return city_name;
+	}
+
+	public void setCity_name(String city_name) {
+		this.city_name = city_name;
+	}
 
 }

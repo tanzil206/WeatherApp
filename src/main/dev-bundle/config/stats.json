@@ -256,9 +256,9 @@
   "Frontend/generated/jar-resources/datepickerConnector.js",
   "Frontend/generated/jar-resources/dndConnector-es6.js",
   "Frontend/generated/jar-resources/flow-component-renderer.js",
-  "Frontend/generated/jar-resources/grid-pagination.js",
   "Frontend/generated/jar-resources/gridConnector.js",
   "Frontend/generated/jar-resources/gridProConnector.js",
+  "Frontend/generated/jar-resources/lit-pagination.js",
   "Frontend/generated/jar-resources/lit-renderer.ts",
   "Frontend/generated/jar-resources/lumo-includes.ts",
   "Frontend/generated/jar-resources/menubarConnector.js",
@@ -279,9 +279,9 @@
   "datepickerConnector.js": "84d25236e1e478c2e181a7881464ad75228a30ccd99d60f78186f0804b6a4a37",
   "dndConnector-es6.js": "d1923b7ec5655346bc130c7ce477d69eb3776417ddc942dd7f69fee1188e0ddf",
   "flow-component-renderer.js": "f45de3d78e4719c2eb7aa09b48ec758e1e44e171cd4ad545ac9e33c3623dcfb1",
-  "grid-pagination.js": "5de55166ac57befb47fb5c004791d9a8a15d6af4b0c01b130b9e9f8edffa0a9f",
   "gridConnector.js": "3cd2d097e1a70104dcb917caf829aba6628fd18644d54dbcde3f0e40913669e2",
   "gridProConnector.js": "bda2f830ef5a534e672457a633787dad9d7e69467b90330d1f5310d01dcbb61f",
+  "lit-pagination.js": "a588d853366539d8d5417c897498b07f3cf2d72eb57ab419ddd8991021e12690",
   "lit-renderer.ts": "afefa9f5fcb38260a0ff08bc044a5f591f242689ca3c7905130ad32df0476e7c",
   "lumo-includes.ts": "be2372586a5d7de41ae33e60d9b882eba8b7f751d314cfae1672c32ee8fd09ea",
   "menubarConnector.js": "8ddac5a87155632c516fd16c9402bd9a2fe6d965998169743744842aacdfd412",
@@ -298,7 +298,7 @@
   "mytodo": "{\n  \"lumoImports\" : [ \"typography\", \"color\", \"spacing\", \"badge\", \"utility\" ]\n}"
  },
  "entryScripts": [
-  "VAADIN/build/indexhtml-60911b89.js"
+  "VAADIN/build/indexhtml-ddece7a8.js"
  ],
  "webComponents": [],
  "packageJsonHash": "1ddbbe972162ad87b38be341c3399b706c5922b942d809dac60e80103cb5f303"

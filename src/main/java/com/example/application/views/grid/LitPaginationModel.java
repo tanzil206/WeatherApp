@@ -6,7 +6,7 @@ import com.vaadin.flow.component.Synchronize;
 /**
  * Utility interface used to define lit-pagination properties
  */
-public interface GridPaginationModel extends HasElement {
+public interface LitPaginationModel extends HasElement {
 
 	/**
 	 * Returns the selected page on the paginator.

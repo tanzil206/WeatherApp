@@ -47,7 +47,7 @@ public class LocationDataProvider extends AbstractBackEndDataProvider<Location, 
 
 		// Filtering
 		if (query.getFilter().isPresent()) {
-			stream = stream.filter(Location -> query.getFilter().get().test(Location));
+			stream = stream.filter(Location -> query.getFilter().get().checkLocation(Location));
 		}
 
 		// Sorting
@@ -79,8 +79,8 @@ public class LocationDataProvider extends AbstractBackEndDataProvider<Location, 
 	private static Comparator<Location> LocationFieldComparator(String sorted) {
 		Location location = new Location();
 
-		if (sorted.equals("latitude")) {
-			return Comparator.comparing(Location -> location.getLatitude());
+		if (sorted.equals("city_name")) {
+			return Comparator.comparing(Location -> location.getCity_name());
 		} else if (sorted.equals("date")) {
 			return Comparator.comparing(Location -> location.getDate());
 		}

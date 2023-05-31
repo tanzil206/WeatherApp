@@ -21,12 +21,8 @@ import org.json.JSONObject;
 @Service
 public class CityService {
 
-
 	@Autowired
 	CityRepository cityRepository;
-
-
-
 
 	public ArrayList<City> getAllCity() {
 		ArrayList<City> city = new ArrayList<>();
@@ -34,11 +30,10 @@ public class CityService {
 		return city;
 	}
 
-	public City getByCity(String city) {
-		City city = cityRepository.findByDate(city);
+	public City getByCity(String city_name) {
+		City city = cityRepository.findByCity_name(city_name);
 
 		return city;
 	}
-
 
 }

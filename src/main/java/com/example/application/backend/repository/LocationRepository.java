@@ -24,6 +24,13 @@ public interface LocationRepository extends CrudRepository<Location, Long>  {
 
 	@Query(value ="SELECT MAX(a.id) FROM location a WHERE a.date = ?1 ORDER BY id DESC", nativeQuery = true)
 	public long findIdByDate(String date);
+	
+	@Query(value ="SELECT DISTINCT a.city_name FROM location a", nativeQuery = true)
+	public ArrayList<String> findDistinctCity_name();
+	
+	
+	@Query(value ="SELECT MAX(a.id) FROM location a WHERE a.city_name = ?1 ORDER BY id DESC", nativeQuery = true)
+	public long findIdByCity_name(String cityName);
 
 
 	

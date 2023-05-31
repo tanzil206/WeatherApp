@@ -12,54 +12,62 @@ import jakarta.persistence.Table;
 @Table(name = "city")
 public class City {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Integer id;
-    @Column(name = "city_name")
-    private String city_name;
-    @Column(name = "latitude")
-    private String latitude;
-    @Column(name = "longitude")
-    private String longitude;
-    @Column(name = "favourite")
-    private String favourite;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	private Integer id;
+	@Column(name = "city_name")
+	private String city_name;
+	@Column(name = "latitude")
+	private String latitude;
+	@Column(name = "longitude")
+	private String longitude;
+	@Column(name = "favourite")
+	private String favourite;
 
-    public City() {
+	public City() {
 
-        super();
-    }
+		super();
+	}
 
-    public String getCity_name() {
-        return city_name;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setCity_name(String city_name) {
-        this.city_name = city_name;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getLatitude() {
-        return latitude;
-    }
+	public String getCity_name() {
+		return city_name;
+	}
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
+	public void setCity_name(String city_name) {
+		this.city_name = city_name;
+	}
 
-    public String getFavourite() {
-        return favourite;
-    }
+	public String getLatitude() {
+		return latitude;
+	}
 
-    public void setFavourite(String favourite) {
-        this.favourite = favourite;
-    }
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
 
-    public String getLongitude() {
-        return longitude;
-    }
+	public String getFavourite() {
+		return favourite;
+	}
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
+	public void setFavourite(String favourite) {
+		this.favourite = favourite;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
 
 }

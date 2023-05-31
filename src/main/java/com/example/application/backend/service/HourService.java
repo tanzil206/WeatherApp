@@ -36,9 +36,9 @@ public class HourService {
 		return hour;
 	}
 
-	public ArrayList<Hour> getHourlyForecast(String date) {
-		ArrayList<Hour> locationList = new ArrayList<>();
-		List<Hour> hour = hourRepository.findByDate(date);
+	public ArrayList<Hour> getHourlyForecast(String cityName,String date) {
+		ArrayList<Hour> forecastList = new ArrayList<>();
+		List<Hour> hour = hourRepository.findByCity_nameAndDate(cityName,date);
 
 		return (ArrayList<Hour>) hour;
 	}

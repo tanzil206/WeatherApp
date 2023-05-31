@@ -22,7 +22,8 @@ public class ApiUtility {
 
         HttpResponse<String> response = null;
         try {
-            String forecastUrl = propertyReader.loadPropertiesValues("weather.forecast.api.url" + latitude + "&longitude=" + longitude + "weather.forecast.api.param");
+            String forecastUrl = propertyReader.loadPropertiesValues("weather.forecast.api.url") + latitude + "&longitude=" + longitude + propertyReader.loadPropertiesValues("weather.forecast.api.param");
+            System.out.println(forecastUrl);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(forecastUrl))
                     .method("GET", HttpRequest.BodyPublishers.noBody()).build();;

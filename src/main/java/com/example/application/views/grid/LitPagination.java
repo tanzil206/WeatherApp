@@ -24,17 +24,17 @@ import com.vaadin.flow.shared.Registration;
 @NpmPackage(value = "@polymer/paper-icon-button", version = "^3.0.2")
 @NpmPackage(value = "lit-element", version = "^3.2.2")
 @NpmPackage(value = "lit-html", version = "2.4.0")
-@JsModule("./grid-pagination.js")
-public class GridPagination extends Component implements GridPaginationModel {
+@JsModule("./lit-pagination.js")
+public class LitPagination extends Component implements LitPaginationModel {
 
 	/**
 	 * Default constructor creating an instance of the PlutoniumPagination using
 	 * default values.
 	 */
-	public GridPagination() {
+	public LitPagination() {
 		this.setTotal(2);
 		setPageSize(1);
-		setSize(1);
+		setSize(2);
 	}
 
 	/**
@@ -89,11 +89,11 @@ public class GridPagination extends Component implements GridPaginationModel {
 	 *
 	 */
 	@DomEvent("page-change")
-	public static class PageChangeEvent extends ComponentEvent<GridPagination> {
+	public static class PageChangeEvent extends ComponentEvent<LitPagination> {
 		private final int newPage;
 		private final int oldPage;
 
-		public PageChangeEvent(GridPagination source, boolean fromClient,
+		public PageChangeEvent(LitPagination source, boolean fromClient,
 				@EventData("event.detail.newPage") int newPage, @EventData("event.detail.oldPage") int oldPage) {
 			super(source, fromClient);
 			this.newPage = newPage;

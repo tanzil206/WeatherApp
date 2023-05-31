@@ -48,11 +48,15 @@ public class WeatherView extends VerticalLayout {
 	@Autowired
 	HourService hourService;
 
-	public WeatherView(LocationService service,HourService hourService) {
+	private int totalAmountOfPages;
+	private int itemsPerPage = 2;
+	private int currentPageNumber = 1;
+
+	public WeatherView(LocationService service, HourService hourService) {
 
 		this.service = service;
-		this.hourService= hourService;
-		service.locationValueParse();
+		this.hourService = hourService;
+		service.jsonValueParse();
 		add(new H1("Daily Weather Reports"));
 		var tabSheet = new TabSheet();
 		tabSheet.setWidth("100%");
@@ -61,10 +65,8 @@ public class WeatherView extends VerticalLayout {
 		add(tabSheet);
 	}
 
-
 	public Component GridDataProvider(HourService hourService) {
 
-		
 		SearchFilter searchFilter = new SearchFilter();
 
 		LocationDataProvider dataProvider = new LocationDataProvider(service);
@@ -72,7 +74,28 @@ public class WeatherView extends VerticalLayout {
 		ConfigurableFilterDataProvider<Location, Void, SearchFilter> filterDataProvider = dataProvider
 				.withConfigurableFilter();
 
+		//Grid<Location> grid = new Grid<>(Location.class, false);
+		
 		PaginatedGrid<Location> grid = new PaginatedGrid<>();
+
+		// totalAmountOfPages = RestApi.getPageCount(itemsPerPage);
+		// List<Location> initialItems = RestApi.getPageItems(currentPageNumber,
+		// totalAmountOfPages, itemsPerPage);
+		// grid.setItems(initialItems);
+//		Button nextButton = new Button("Next page", e -> {
+//			if (currentPageNumber >= totalAmountOfPages) {
+//				return;
+//			}
+//			//List<Location> nextPageItems = RestApi.getPageItems(++currentPageNumber, totalAmountOfPages, itemsPerPage);
+//			//grid.setItems(nextPageItems);
+//		});
+//		Button previousButton = new Button("Previous page", e -> {
+//			if (currentPageNumber <= 1) {
+//				return;
+//			}
+//			//List<Location> prevPageItems = RestApi.getPageItems(--currentPageNumber, totalAmountOfPages, itemsPerPage);
+//			//grid.setItems(prevPageItems);
+//		});
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
@@ -84,7 +107,7 @@ public class WeatherView extends VerticalLayout {
 
 			// button for saving the name to backend
 			Button update = new Button("Favourite", event -> {
-				String city_name = Location.getCity_name;
+				String city_name = Location.getCity_name();
 				service.updatefavourite(city_name);
 				grid.getDataProvider().refreshItem(Location);
 			});
@@ -94,15 +117,17 @@ public class WeatherView extends VerticalLayout {
 			return new VerticalLayout(buttons);
 		})).setHeader("Actions");
 
+		grid.setPageSize(1);
+	//	grid.setP
+		 grid.setPaginatorSize(5);
+		grid.getDataProvider().refreshAll();
 		grid.setItems(filterDataProvider);
-		
-		// Sets the max number of items to be rendered on the grid for each page
-	//	grid.setPageSize(2);
-		
-		// Sets how many pages should be visible on the pagination before and/or after the current selected page
-		grid.setPaginatorSize(5);
 
-		
+		// Sets the max number of items to be rendered on the grid for each page
+
+		// Sets how many pages should be visible on the pagination before and/or after
+		// the current selected page
+		//
 
 		TextField searchField = new TextField();
 		searchField.setWidth("50%");
@@ -120,12 +145,13 @@ public class WeatherView extends VerticalLayout {
 
 		grid.addSelectionListener(selection -> {
 			Optional<Location> optionalPerson = selection.getFirstSelectedItem();
+			String cityName = optionalPerson.get().getCity_name();
 			String date = optionalPerson.get().getDate();
 			// if (optionalPerson.isPresent()) {
 
 			DailyWeather dailyWeather = new DailyWeather();
-			Dialog dialog = dailyWeather.dailyForecast(hourService,date);
-		
+			Dialog dialog = dailyWeather.dailyForecast(hourService,cityName, date);
+
 			add(dialog);
 			dialog.open();
 

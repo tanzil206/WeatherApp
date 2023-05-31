@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class PaginatedGrid<T> extends Grid<T> {
 
-	private final GridPagination pagination = new GridPagination();
+	private final LitPagination pagination = new LitPagination();
 
 	private Component paginationContainer = null;
 
@@ -205,7 +205,7 @@ public class PaginatedGrid<T> extends Grid<T> {
 	 * @param listener to be added
 	 * @return registration to unregister the listener from the component
 	 */
-	public Registration addPageChangeListener(ComponentEventListener<GridPagination.PageChangeEvent> listener) {
+	public Registration addPageChangeListener(ComponentEventListener<LitPagination.PageChangeEvent> listener) {
 		return pagination.addPageChangeListener(listener);
 	}
 

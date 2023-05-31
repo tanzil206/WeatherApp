@@ -5,7 +5,7 @@ import '@polymer/paper-button/paper-button';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-iconset-svg';
 
-class GridPagination extends LitElement {
+class LitPagination extends LitElement {
 
   static get styles() {
     return css`
@@ -314,4 +314,4 @@ class GridPagination extends LitElement {
     }
 }
 
-customElements.define('lit-pagination', GridPagination);
+customElements.define('lit-pagination', LitPagination);

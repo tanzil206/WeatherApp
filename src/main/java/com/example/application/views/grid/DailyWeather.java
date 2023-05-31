@@ -19,13 +19,15 @@ public class DailyWeather {
 	@Autowired
 	HourService hourService;
 
-	public Dialog dailyForecast(HourService hourService, String date) {
-		
-		this.hourService= hourService;
+	public Dialog dailyForecast(HourService hourService, String cityName, String date) {
+
+		this.hourService = hourService;
 		Dialog dialog = new Dialog();
 		dialog.setHeaderTitle("Daily Weather");
 
 		HourDataProvider hourDataProvider = new HourDataProvider(hourService);
+
+		hourDataProvider.setCitName(cityName);
 
 		hourDataProvider.setDate(date);
 
@@ -38,7 +40,7 @@ public class DailyWeather {
 //dailygGrid.addColumn(Hour::getHour).setHeader("Hour").setSortable(true);
 		grid.addColumn(Hour::getTempLevel).setHeader("Temperature").setSortable(true);
 		grid.addColumn(Hour::getHumidityLevel).setHeader("Humidity").setSortable(true);
-
+		grid.addColumn(Hour::getRain).setHeader("Rain").setSortable(true);
 		grid.setItems(hourFilterDataProvider);
 		Button closeButton = new Button(new Icon("lumo", "cross"), (e) -> dialog.close());
 		closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);

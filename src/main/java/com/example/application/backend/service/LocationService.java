@@ -61,11 +61,11 @@ public class LocationService {
     public ArrayList<Location> getDailyForecast() {
         ArrayList<Location> locationList = new ArrayList<>();
         Location location = new Location();
-        List<String> distinctDate = locationRepository.findDistinctDate();
+        List<String> distinctCity = locationRepository.findDistinctCity_name();
 
-        for (int i = 0; i < distinctDate.size(); i++) {
+        for (int i = 0; i < distinctCity.size(); i++) {
 
-            long locationLd = locationRepository.findIdByDate(distinctDate.get(i));
+            long locationLd = locationRepository.findIdByCity_name(distinctCity.get(i));
 
             location = locationRepository.findById(locationLd);
             locationList.add(location);
@@ -90,14 +90,14 @@ public class LocationService {
 
     public void jsonValueParse() {
 
-        Location location = new Location();
+        
 
         ArrayList<City> cityList = cityService.getAllCity();
         ApiUtility apiUtility = new ApiUtility();
         if (cityList.size() > 0) {
 
             for (int c = 0; c < cityList.size(); c++) {
-
+            	Location location = new Location();
                 String latitude = cityList.get(c).getLatitude();
                 String longitude = cityList.get(c).getLongitude();
 
@@ -127,16 +127,17 @@ public class LocationService {
                 location.setLocationTimezone(obj.get("timezone").toString());
                 location.setElevation(obj.get("elevation").toString());
 
-                long locationId = locationRepository.save(location).getId();
+                locationRepository.save(location);
                 JSONObject hourBody = obj.getJSONObject("hourly");
 
-                String[] per_hour = hourBody.getJSONArray("time").getJSONArray(0).toString().split(",");
-                String[] per_temp = hourBody.getJSONArray("temperature_2m").getJSONArray(0).toString().split(",");
-                String[] per_humidity = hourBody.getJSONArray("relativehumidity_2m").getJSONArray(0).toString().split(",");
-                String[] per_wind = hourBody.getJSONArray("windspeed_10m").getJSONArray(0).toString().split(",");
-                String[] per_rain = hourBody.getJSONArray("rain").getJSONArray(0).toString().split(",");
-                Hour hour = new Hour();
+                String[] per_hour = hourBody.getJSONArray("time").toString().split(",");
+                String[] per_temp = hourBody.getJSONArray("temperature_2m").toString().split(",");
+                String[] per_humidity = hourBody.getJSONArray("relativehumidity_2m").toString().split(",");
+                String[] per_wind = hourBody.getJSONArray("windspeed_10m").toString().split(",");
+                String[] per_rain = hourBody.getJSONArray("rain").toString().split(",");
+                
                 for (int t = 0; t < per_hour.length; t++) {
+                	Hour hour = new Hour();
                     String time = per_hour[t].toString();
                     String temp = per_temp[t].toString();
                     String humidity = per_humidity[t].toString();
@@ -150,7 +151,7 @@ public class LocationService {
                     hour.setHumidityLevel(humidity);
                     hour.setWindSpeedLevel(wind);
                     hour.setRain(rain);
-                    hourRepository.save(hour).getId();
+                    hourRepository.save(hour);
                 }
             }
 
