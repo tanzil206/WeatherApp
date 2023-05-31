@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <!-- Project from https://start.vaadin.com/ -->
     <groupId>com.example.application</groupId>
-    <artifactId>mytodo</artifactId>
-    <name>mytodo</name>
+    <artifactId>weather</artifactId>
+    <name>weather</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -30,17 +30,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>central</id>
-            <name>bintray</name>
-            <url>http://jcenter.bintray.com</url>
-        </repository>
     </repositories>
-
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -52,7 +42,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -110,11 +99,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.19</version>
-        </dependency>
-        <dependency>
-            <groupId>com.byteowls</groupId>
-            <artifactId>vaadin-chartjs</artifactId>
-            <version>1.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

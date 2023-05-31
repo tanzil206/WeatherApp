@@ -1,17 +1,11 @@
-package com.example.application.views.login;
+package com.example.application.views;
 
-import java.util.List;
+
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import com.example.application.views.grid.DailyWeather;
-import com.example.application.backend.model.Hour;
 import com.example.application.backend.model.Location;
-import com.example.application.backend.repository.LocationRepository;
 import com.example.application.backend.service.HourService;
 import com.example.application.backend.service.LocationService;
-import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
@@ -21,27 +15,19 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
-import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.spring.data.VaadinSpringDataHelpers;
 import com.example.application.views.grid.PaginatedGrid;
 import jakarta.annotation.security.PermitAll;
 import com.example.application.views.main.MainView;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.dialog.DialogVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.example.application.backend.utility.SearchFilter;
-import com.example.application.backend.utility.LocationDataProvider;
-import com.example.application.backend.utility.HourDataProvider;
+
 
 @PermitAll
-@Route(value = "", layout = MainView.class)
+@Route(value = "weather", layout = MainView.class)
 public class WeatherView extends VerticalLayout {
 
 	@Autowired
@@ -75,7 +61,7 @@ public class WeatherView extends VerticalLayout {
 			// button for saving the name to backend
 			Button update = new Button("Favourite", event -> {
 				String city_name = Location.getCity_name();
-				service.updatefavourite(city_name);
+				service.updatefavourite(city_name,"yes");
 				grid.getDataProvider().refreshItem(Location);
 			});
 			HorizontalLayout buttons = new HorizontalLayout(update);
@@ -114,8 +100,8 @@ public class WeatherView extends VerticalLayout {
 			String cityName = optionalPerson.get().getCity_name();
 			String date = optionalPerson.get().getDate();
 
-			DailyWeather dailyWeather = new DailyWeather();
-			Dialog dialog = dailyWeather.dailyForecast(hourService, cityName, date);
+			HourlyWeatherView hourlyWeather = new HourlyWeatherView();
+			Dialog dialog = hourlyWeather.hourlyForecast(hourService, cityName, date);
 
 			add(dialog);
 			dialog.open();

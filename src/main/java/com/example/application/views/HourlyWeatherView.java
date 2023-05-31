@@ -1,4 +1,4 @@
-package com.example.application.views.grid;
+package com.example.application.views;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,13 +13,14 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.dialog.DialogVariant;
 import com.vaadin.flow.component.icon.Icon;
+import com.example.application.views.grid.*;
 
-public class DailyWeather {
+public class HourlyWeatherView {
 
 	@Autowired
 	HourService hourService;
 
-	public Dialog dailyForecast(HourService hourService, String cityName, String date) {
+	public Dialog hourlyForecast(HourService hourService, String cityName, String date) {
 
 		this.hourService = hourService;
 		Dialog dialog = new Dialog();
@@ -37,7 +38,7 @@ public class DailyWeather {
 		PaginatedGrid<Hour> grid = new PaginatedGrid<>();
 
 		grid.addColumn(Hour::getDate).setHeader("Date");
-        grid.addColumn(Hour::getTime).setHeader("Hour").setSortable(true);
+		grid.addColumn(Hour::getTime).setHeader("Hour").setSortable(true);
 		grid.addColumn(Hour::getTempLevel).setHeader("Temperature").setSortable(true);
 		grid.addColumn(Hour::getHumidityLevel).setHeader("Humidity").setSortable(true);
 		grid.addColumn(Hour::getRain).setHeader("Rain").setSortable(true);

@@ -159,7 +159,6 @@
   "@vaadin/vertical-layout": "24.0.3",
   "@vaadin/virtual-list": "24.0.3",
   "@webcomponents/shadycss": "1.11.2",
-  "construct-style-sheets-polyfill": "3.1.0",
   "cookieconsent": "3.1.1",
   "date-fns": "2.29.3",
   "highcharts": "9.2.2",
@@ -249,6 +248,7 @@
   "@vaadin/vaadin-lumo-styles/vaadin-iconset.js",
   "@vaadin/vertical-layout/theme/lumo/vaadin-vertical-layout.js",
   "@vaadin/virtual-list/vaadin-virtual-list.js",
+  "Frontend/generated/jar-resources/chart.js",
   "Frontend/generated/jar-resources/comboBoxConnector.js",
   "Frontend/generated/jar-resources/contextMenuConnector.js",
   "Frontend/generated/jar-resources/contextMenuTargetConnector.js",
@@ -272,6 +272,7 @@
   "Frontend/generated/jar-resources/virtualListConnector.js"
  ],
  "frontendHashes": {
+  "chart.js": "ebb2f7df8ab9143b69b168f4c15c541d4e011db8397dfde900070b93b12393d0",
   "comboBoxConnector.js": "1d004c3dae9c76f8bcc68678abe1b8f7bdc8b456f5c9c4c7f190df8ed25d66cd",
   "contextMenuConnector.js": "25a200f8086461635ddd92316ebeb5a868294c8650a190efbae120edb1088f4f",
   "contextMenuTargetConnector.js": "870f67643988dd5618c247bd3c28d843f70aa026ee89f44c3c7556b5e70856af",
@@ -294,11 +295,9 @@
   "vaadin-time-picker/timepickerConnector.js": "68889ce9748478f71bf1620d488abbbd588f8047618ac558315d9b0b689e75e8",
   "virtualListConnector.js": "e89f6bc6f5cd4765c863ae12721371ebff9079d163679e3989368fb7f74e5e61"
  },
- "themeJsonContents": {
-  "mytodo": "{\n  \"lumoImports\" : [ \"typography\", \"color\", \"spacing\", \"badge\", \"utility\" ]\n}"
- },
+ "themeJsonContents": {},
  "entryScripts": [
-  "VAADIN/build/indexhtml-e09d901a.js"
+  "VAADIN/build/indexhtml-79f82141.js"
  ],
  "webComponents": [],
  "packageJsonHash": "1ddbbe972162ad87b38be341c3399b706c5922b942d809dac60e80103cb5f303"
