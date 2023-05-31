@@ -62,6 +62,7 @@ public class LitPagination extends Component implements LitPaginationModel {
 	 */
 	public void setPaginatorSize(int size) {
 		setSize(size);
+		setPages(size);
 	}
 
 	public void refresh() {

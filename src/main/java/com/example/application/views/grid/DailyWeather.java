@@ -34,14 +34,18 @@ public class DailyWeather {
 		ConfigurableFilterDataProvider<Hour, Void, SearchFilter> hourFilterDataProvider = hourDataProvider
 				.withConfigurableFilter();
 		// Create the content
-		Grid<Hour> grid = new Grid<>(Hour.class, false);
+		PaginatedGrid<Hour> grid = new PaginatedGrid<>();
 
 		grid.addColumn(Hour::getDate).setHeader("Date");
-//dailygGrid.addColumn(Hour::getHour).setHeader("Hour").setSortable(true);
+        grid.addColumn(Hour::getTime).setHeader("Hour").setSortable(true);
 		grid.addColumn(Hour::getTempLevel).setHeader("Temperature").setSortable(true);
 		grid.addColumn(Hour::getHumidityLevel).setHeader("Humidity").setSortable(true);
 		grid.addColumn(Hour::getRain).setHeader("Rain").setSortable(true);
-		grid.setItems(hourFilterDataProvider);
+		grid.addColumn(Hour::getWindSpeedLevel).setHeader("Wind Speed").setSortable(true);
+		grid.getDataProvider().refreshAll();
+		grid.setItems(hourService.getHourlyForecast(cityName, date));
+		grid.setPageSize(2);
+		grid.setPaginatorSize(2);
 		Button closeButton = new Button(new Icon("lumo", "cross"), (e) -> dialog.close());
 		closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 		dialog.getHeader().add(closeButton);

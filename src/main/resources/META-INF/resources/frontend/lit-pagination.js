@@ -62,7 +62,6 @@ class LitPagination extends LitElement {
             /** Current page. */
             page: {
                 type: Number,
-                reflect: true,
                 attribute: true
             },
             /** Count of the pages displayed before or after the current page. */
@@ -73,7 +72,9 @@ class LitPagination extends LitElement {
             },
             /** Number of paginated pages. */
             pages: {
-                type: Number
+                type: Number,
+                reflect: true,
+                attribute: true
             },
             /** Has pages before the current page. */
             hasBefore: {
@@ -108,6 +109,7 @@ class LitPagination extends LitElement {
         this.size = 2;
         this.items = {};
         this.total = 20;
+        this.pages = 2;
         this.hasBefore = this.computeBefore(this.page, this.pages);
         this.hasNext = this.computeNext(this.page, this.pages);
         this.hasPages = this.computeHasPage(this.items.size, this.total);
@@ -131,6 +133,18 @@ class LitPagination extends LitElement {
     get page(){
         return this._page;
     }
+
+    set pages(val){
+        let oldVal = this._pages;
+        this._pages = val;
+        this.requestUpdate('pages', oldVal);
+    }
+
+    get pages(){
+        return this._pages;
+    }
+
+
 
     set limit(val){
         let oldVal = this._limit;

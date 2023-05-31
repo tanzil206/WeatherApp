@@ -154,7 +154,7 @@ public class PaginatedGrid<T> extends Grid<T> {
 	 * @param size
 	 */
 	public void setPaginatorSize(int size) {
-		pagination.setPage(1);
+		//pagination.setPage(size);
 		pagination.setPaginatorSize(size);
 		pagination.refresh();
 	}

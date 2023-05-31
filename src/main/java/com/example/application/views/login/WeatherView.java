@@ -14,6 +14,7 @@ import com.example.application.backend.service.LocationService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.*;
+import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -23,6 +24,7 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.data.VaadinSpringDataHelpers;
 import com.example.application.views.grid.PaginatedGrid;
@@ -48,10 +50,6 @@ public class WeatherView extends VerticalLayout {
 	@Autowired
 	HourService hourService;
 
-	private int totalAmountOfPages;
-	private int itemsPerPage = 2;
-	private int currentPageNumber = 1;
-
 	public WeatherView(LocationService service, HourService hourService) {
 
 		this.service = service;
@@ -61,44 +59,13 @@ public class WeatherView extends VerticalLayout {
 		var tabSheet = new TabSheet();
 		tabSheet.setWidth("100%");
 		tabSheet.add("", GridDataProvider(hourService));
-
 		add(tabSheet);
 	}
 
 	public Component GridDataProvider(HourService hourService) {
 
-		SearchFilter searchFilter = new SearchFilter();
-
-		LocationDataProvider dataProvider = new LocationDataProvider(service);
-
-		ConfigurableFilterDataProvider<Location, Void, SearchFilter> filterDataProvider = dataProvider
-				.withConfigurableFilter();
-
-		//Grid<Location> grid = new Grid<>(Location.class, false);
-		
 		PaginatedGrid<Location> grid = new PaginatedGrid<>();
-
-		// totalAmountOfPages = RestApi.getPageCount(itemsPerPage);
-		// List<Location> initialItems = RestApi.getPageItems(currentPageNumber,
-		// totalAmountOfPages, itemsPerPage);
-		// grid.setItems(initialItems);
-//		Button nextButton = new Button("Next page", e -> {
-//			if (currentPageNumber >= totalAmountOfPages) {
-//				return;
-//			}
-//			//List<Location> nextPageItems = RestApi.getPageItems(++currentPageNumber, totalAmountOfPages, itemsPerPage);
-//			//grid.setItems(nextPageItems);
-//		});
-//		Button previousButton = new Button("Previous page", e -> {
-//			if (currentPageNumber <= 1) {
-//				return;
-//			}
-//			//List<Location> prevPageItems = RestApi.getPageItems(--currentPageNumber, totalAmountOfPages, itemsPerPage);
-//			//grid.setItems(prevPageItems);
-//		});
-
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-
 		grid.addColumn(Location::getCity_name).setHeader("City Name");
 		grid.addColumn(Location::getPer_temperature).setHeader("Temperature").setSortable(true);
 		grid.addColumn(Location::getWind_speed).setHeader("Wind Speed").setSortable(true);
@@ -111,23 +78,14 @@ public class WeatherView extends VerticalLayout {
 				service.updatefavourite(city_name);
 				grid.getDataProvider().refreshItem(Location);
 			});
-			// layouts for placing the text field on top
-			// of the buttons
 			HorizontalLayout buttons = new HorizontalLayout(update);
 			return new VerticalLayout(buttons);
 		})).setHeader("Actions");
 
-		grid.setPageSize(1);
-	//	grid.setP
-		 grid.setPaginatorSize(5);
 		grid.getDataProvider().refreshAll();
-		grid.setItems(filterDataProvider);
-
-		// Sets the max number of items to be rendered on the grid for each page
-
-		// Sets how many pages should be visible on the pagination before and/or after
-		// the current selected page
-		//
+		GridListDataView<Location> dataView = grid.setItems(service.getDailyForecast());
+		grid.setPageSize(2);
+		grid.setPaginatorSize(2);
 
 		TextField searchField = new TextField();
 		searchField.setWidth("50%");
@@ -135,8 +93,16 @@ public class WeatherView extends VerticalLayout {
 		searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
 		searchField.setValueChangeMode(ValueChangeMode.EAGER);
 		searchField.addValueChangeListener(e -> {
-			searchFilter.setSearchTerm(e.getValue());
-			filterDataProvider.setFilter(searchFilter);
+			dataView.addFilter(location -> {
+				String searchTerm = searchField.getValue().trim();
+
+				if (searchTerm.isEmpty())
+					return true;
+
+				boolean matchesFullName = matchesTerm(location.getCity_name(), searchTerm);
+				boolean matchesDate = matchesTerm(location.getDate(), searchTerm);
+				return matchesFullName || matchesDate;
+			});
 		});
 
 		VerticalLayout layout = new VerticalLayout(searchField, grid);
@@ -147,18 +113,20 @@ public class WeatherView extends VerticalLayout {
 			Optional<Location> optionalPerson = selection.getFirstSelectedItem();
 			String cityName = optionalPerson.get().getCity_name();
 			String date = optionalPerson.get().getDate();
-			// if (optionalPerson.isPresent()) {
 
 			DailyWeather dailyWeather = new DailyWeather();
-			Dialog dialog = dailyWeather.dailyForecast(hourService,cityName, date);
+			Dialog dialog = dailyWeather.dailyForecast(hourService, cityName, date);
 
 			add(dialog);
 			dialog.open();
 
-			// }
 		});
 
 		return layout;
+	}
+
+	private boolean matchesTerm(String value, String searchTerm) {
+		return searchTerm == null || searchTerm.isEmpty() || value.toLowerCase().contains(searchTerm.toLowerCase());
 	}
 
 }

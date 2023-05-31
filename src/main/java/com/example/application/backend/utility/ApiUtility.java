@@ -12,12 +12,9 @@ public class ApiUtility {
 
     public ApiUtility() {
         super();
-        //    init();
     }
 
-//    private void init() {
-//        weatherDataRetriver();
-//    }
+
     public String weatherDataRetriver(String latitude, String longitude) {
 
         HttpResponse<String> response = null;

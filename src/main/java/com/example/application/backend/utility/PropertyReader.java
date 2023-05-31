@@ -5,7 +5,6 @@
  */
 package com.example.application.backend.utility;
 
-
 import java.io.IOException;
 import java.util.Properties;
 
@@ -15,19 +14,19 @@ import java.util.Properties;
  */
 public class PropertyReader {
 
-    public String loadPropertiesValues(String key) throws IOException {
-        Properties prop = new Properties();
-        String propertiesValue = "";
-        try {
-            //load a properties file from class path, inside static method
-            prop.load(PropertyReader.class.getClassLoader().getResourceAsStream("application.properties"));
+	public String loadPropertiesValues(String key) throws IOException {
+		Properties prop = new Properties();
+		String propertiesValue = "";
+		try {
+			// load a properties file from class path, inside static method
+			prop.load(PropertyReader.class.getClassLoader().getResourceAsStream("application.properties"));
 
-            propertiesValue = prop.getProperty(key);
+			propertiesValue = prop.getProperty(key);
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return propertiesValue;
-    }
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		return propertiesValue;
+	}
 
 }

@@ -67,6 +67,27 @@ public interface LitPaginationModel extends HasElement {
 	}
 
 	/**
+	 * Returns the selected page on the paginator.
+	 *
+	 * @return page
+	 */
+	@Synchronize("page-change")
+	default int getPages() {
+		return Integer.valueOf(getElement().getProperty("pages", "0"));
+	}
+
+	
+	
+	/**
+	 * Sets the count of the pages displayed before or after the current page.
+	 *
+	 * @param size
+	 */
+	default void setPages(int size) {
+		getElement().setProperty("pages", Integer.toString(size));
+	}
+
+	/**
 	 * Sets the count of the pages displayed before or after the current page.
 	 *
 	 * @param size
@@ -75,6 +96,9 @@ public interface LitPaginationModel extends HasElement {
 		getElement().setProperty("size", Integer.toString(size));
 	}
 
+	
+	
+	
 	/**
 	 * Sets the text to display for the `Page` term in the Paginator.
 	 *

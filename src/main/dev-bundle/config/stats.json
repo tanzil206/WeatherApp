@@ -281,7 +281,7 @@
   "flow-component-renderer.js": "f45de3d78e4719c2eb7aa09b48ec758e1e44e171cd4ad545ac9e33c3623dcfb1",
   "gridConnector.js": "3cd2d097e1a70104dcb917caf829aba6628fd18644d54dbcde3f0e40913669e2",
   "gridProConnector.js": "bda2f830ef5a534e672457a633787dad9d7e69467b90330d1f5310d01dcbb61f",
-  "lit-pagination.js": "a588d853366539d8d5417c897498b07f3cf2d72eb57ab419ddd8991021e12690",
+  "lit-pagination.js": "9a29082ece27d666c7509b791e5f11f3988e9b338ecce921eb8e83cf8a791d8f",
   "lit-renderer.ts": "afefa9f5fcb38260a0ff08bc044a5f591f242689ca3c7905130ad32df0476e7c",
   "lumo-includes.ts": "be2372586a5d7de41ae33e60d9b882eba8b7f751d314cfae1672c32ee8fd09ea",
   "menubarConnector.js": "8ddac5a87155632c516fd16c9402bd9a2fe6d965998169743744842aacdfd412",
@@ -298,7 +298,7 @@
   "mytodo": "{\n  \"lumoImports\" : [ \"typography\", \"color\", \"spacing\", \"badge\", \"utility\" ]\n}"
  },
  "entryScripts": [
-  "VAADIN/build/indexhtml-ddece7a8.js"
+  "VAADIN/build/indexhtml-e09d901a.js"
  ],
  "webComponents": [],
  "packageJsonHash": "1ddbbe972162ad87b38be341c3399b706c5922b942d809dac60e80103cb5f303"
